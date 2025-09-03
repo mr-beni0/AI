@@ -1,0 +1,432 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>World Mission High School</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background-color: white;
+    }
+    .header {
+      display: flex;
+      gap: 80px;
+      background-color: aliceblue;
+      padding-left: 100px;
+      align-items: center;
+      height: 60px;
+    }
+    .header p {
+      margin: 0;
+    }
+    .sub {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding-left: 100px;
+      margin-top: 10px;
+    }
+    .sub h3 {
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    select {
+      border: none;
+      padding: 5px 10px;
+      background-color: transparent;
+      transition: background-color 0.3s ease;
+      cursor: pointer;
+      font-size: large;
+    }
+    select:hover {
+      color: skyblue;
+    }
+    img {
+      vertical-align: middle;
+    }
+
+    /* Chat Toggle Button */
+    #chatToggle {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 12px 20px;
+      border-radius: 30px;
+      cursor: pointer;
+      font-weight: bold;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      transition: all 0.3s ease;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border: none;
+    }
+    #chatToggle:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+    }
+
+    /* Chat Container */
+    #chatBoxContainer {
+      position: fixed;
+      bottom: 100px;
+      right: 20px;
+      width: 350px;
+      max-height: 500px;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      padding: 20px;
+      z-index: 999;
+      display: none;
+      flex-direction: column;
+      gap: 15px;
+    }
+    .chat-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #667eea;
+      font-size: 18px;
+      font-weight: bold;
+      color: #333;
+    }
+    .closeBtn {
+      font-size: 16px;
+      cursor: pointer;
+      color: #667eea;
+      background: none;
+      border: none;
+      padding: 5px;
+      margin: 0;
+    }
+    .closeBtn:hover {
+      color: #333;
+    }
+    #chatbox {
+      text-align: left;
+      height: 250px;
+      overflow-y: auto;
+      padding: 10px;
+      margin-bottom: 10px;
+      background-color: rgba(255, 255, 255, 0.7);
+      border-radius: 10px;
+    }
+    .user, .bot {
+      margin: 10px 0;
+      display: flex;
+      flex-direction: column;
+    }
+    .user {
+      align-items: flex-end;
+    }
+    .bot {
+      align-items: flex-start;
+    }
+    .message-box {
+      display: inline-block;
+      padding: 12px 18px;
+      border-radius: 20px;
+      max-width: 80%;
+      font-size: 16px;
+      word-wrap: break-word;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      margin: 5px 0;
+    }
+    .user .message-box {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+    .bot .message-box {
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      color: #333;
+    }
+
+    /* Input and Send Button */
+    input {
+      padding: 12px;
+      width: calc(100% - 70px);
+      border-radius: 20px;
+      border: 2px solid #667eea;
+      margin-right: 5px;
+      font-size: 16px;
+    }
+    button {
+      padding: 12px;
+      border-radius: 20px;
+      width: 50px;
+      border: none;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      transition: all 0.3s ease;
+    }
+    button:hover {
+      transform: scale(1.05);
+    }
+
+    .welcome {
+      font-size: 16px;
+      color: #667eea;
+      margin-bottom: 10px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    /* Staff Section */
+    .staff {
+      position: fixed;
+      bottom: 100px;
+      right: 20px;
+      width: 350px;
+      max-height: 500px;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      padding: 20px;
+      z-index: 999;
+      display: none;
+      flex-direction: column;
+    }
+    .staff h3 {
+      margin-top: 0;
+      color: #333;
+    }
+    .staff ul {
+      list-style: none;
+      padding: 0;
+      margin: 15px 0;
+    }
+    .staff li {
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .staff a {
+      color: white;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 6px 12px;
+      border-radius: 20px;
+      text-decoration: none;
+      font-size: 14px;
+    }
+    .staff button {
+       
+     width: fit-content;
+      background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+      border: none;
+      border-radius: 20px;
+      color: white;
+      font-weight: bold;
+      margin-top: 20px;
+      cursor: pointer;
+    }
+
+    /* Talk to Staff Button in Chat */
+    .staff-btn {
+     
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    width: fit-content;
+      transition: all 0.3s ease;
+   
+    }
+    .staff-btn:hover {
+      transform: scale(1.05);
+    }
+
+    /* Calendar */
+    #eventCalendar {
+      border-radius: 15px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+      margin: 20px auto;
+      max-width: 900px;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      padding: 20px;
+    }
+    #eventCalendar h2 {
+      color: #2c3e50;
+      text-align: center;
+      font-size: 28px;
+      margin-bottom: 20px;
+    }
+    #calendar {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 8px;
+    }
+    .calendar-header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 12px;
+      text-align: center;
+      font-weight: bold;
+      border-radius: 10px;
+    }
+    .calendar-day {
+      background-color: #ecf0f1;
+      min-height: 100px;
+      padding: 8px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    .calendar-day.has-event {
+      background-color: #d5f5e3;
+      border: 2px solid #667eea;
+    }
+    .event {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 4px 8px;
+      border-radius: 15px;
+      font-size: 12px;
+      margin: 4px 0;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <p>📧 worldmission779@gmail.com</p> | 
+    <p>📞(+250)785 623 245 / 781 253 525</p>
+  </div>
+
+  <div class="sub">
+    <h3><img src="Nlogo.png" width="60px" height="60px" alt=""> WORLD MISSION HIGH SCHOOL</h3>
+    <select onchange="navigate(this)">
+      <option>Home</option>
+      <option>About</option>
+      <option>Academic</option>
+      <option>School Life</option>
+      <option>Contact</option>
+      <option value="calendar">Event Calendar</option>
+    </select>
+  </div>
+
+  <img src="bo.png" alt="School Banner" style="width: 100%; margin-top: 20px;">
+
+  <!-- Event Calendar Section -->
+  <div id="eventCalendar" style="display: none;">
+    <h2>Event Calendar</h2>
+    <div id="calendar" style="background: white; padding: 20px; border-radius: 15px;"></div>
+  </div>
+
+  <!-- Chat System -->
+  <div id="chatToggle">🧠 WOMI AI</div>
+
+  <div id="chatBoxContainer">
+    <div class="chat-header">
+      <span>🧠 WOMI AI</span>
+      <button class="closeBtn" onclick="closeChat()">✖</button>
+    </div>
+    <div id="chatbox">
+      <div id="welcomeMessage" class="welcome">👋 Welcome to World Mission Assistant made by Beni 💫</div>
+    </div>
+    <button class="staff-btn" onclick="show()">TALK TO SCHOOL STAFF</button>
+    <div style="display: flex; margin-top: 10px;">
+      <input type="text" placeholder="Ask me anything..." id="userInput">
+      <button onclick="talk()" title="Send Message">➤</button>
+    </div>
+  </div>
+
+  <!-- Staff Section -->
+  <div class="staff" id="staff">
+    <h3>⚠️ You're about to message an official staff member</h3>
+    <p>Please keep your message respectful.</p>
+    <hr>
+    <ul>
+      <li><strong>Head Master</strong> <a href="https://wa.me/250785623245" target="_blank">WhatsApp</a></li>
+      <li><strong>Dean of Studies</strong> <a href="https://wa.me/250785623245" target="_blank">WhatsApp</a></li>
+      <li><strong>Accountant</strong> <a href="https://wa.me/250785623245" target="_blank">WhatsApp</a></li>
+      <li><strong>Administrator</strong> <a href="https://wa.me/250785623245" target="_blank">WhatsApp</a></li>
+      <li><strong>Head Boy</strong> <a href="https://wa.me/250785623245" target="_blank">WhatsApp</a></li>
+      <li><strong>Head Girl</strong> <a href="https://wa.me/250785623245" target="_blank">WhatsApp</a></li>
+      <li><strong>Owner</strong> <a href="https://wa.me/250785623245" target="_blank">WhatsApp</a></li>
+    </ul>
+    <button onclick="hide()">Close</button>
+  </div>
+
+  <script>
+    function show() {
+      document.getElementById('staff').style.display = "block";
+    }
+    function hide() {
+      document.getElementById('staff').style.display = "none";
+    }
+
+    // open on hover
+    const chatToggle = document.getElementById("chatToggle");
+    const chatBox = document.getElementById("chatBoxContainer");
+
+    chatToggle.addEventListener("mouseenter", () => {
+      chatBox.style.display = "flex";
+    });
+
+    function closeChat() {
+      chatBox.style.display = "none";
+    }
+
+    function talk() {
+      const input = document.getElementById('userInput').value.toLowerCase().trim();
+      const chatbox = document.getElementById('chatbox');
+      if (!input) return;
+      chatbox.innerHTML += `<div class="user"><div class="message-box">😎 ${input}</div></div>`;
+      let response = "I couldn't find current info on that.";
+      if (input.includes("hello") || input.includes("hi")) response = "Hello student, what can I help you with?";
+      chatbox.innerHTML += `<div class="bot"><div class="message-box">🤓 ${response}</div></div>`;
+      document.getElementById("userInput").value = "";
+      chatbox.scrollTop = chatbox.scrollHeight;
+    }
+
+    document.getElementById("userInput").addEventListener("keydown", function(event) {
+      if (event.key === "Enter") {
+        talk();
+      }
+    });
+
+    function navigate(selectElement) {
+      const selectedValue = selectElement.value;
+      const eventCalendar = document.getElementById('eventCalendar');
+      eventCalendar.style.display = 'none';
+      if (selectedValue === 'calendar') {
+        eventCalendar.style.display = 'block';
+        renderCalendar();
+      }
+    }
+
+    function renderCalendar() {
+      const calendar = document.getElementById('calendar');
+      calendar.innerHTML = '';
+      const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+      days.forEach(day => {
+        const header = document.createElement('div');
+        header.className = 'calendar-header';
+        header.textContent = day;
+        calendar.appendChild(header);
+      });
+      for (let i = 1; i <= 30; i++) {
+        const day = document.createElement('div');
+        day.className = 'calendar-day';
+        day.innerHTML = `<strong>${i}</strong>`;
+        if (i === 5) day.innerHTML += `<div class="event">ASS1</div>`;
+        if (i === 12) day.innerHTML += `<div class="event">ASS2</div>`;
+        if (i === 18) day.innerHTML += `<div class="event">Korean Culture</div>`;
+        if (i === 25) day.innerHTML += `<div class="event">Report Cards</div>`;
+        calendar.appendChild(day);
+      }
+    }
+  </script>
+</body>
+</html>
